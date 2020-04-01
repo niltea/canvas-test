@@ -15,6 +15,8 @@ const log = (() => {
 const canvas = {
   startX: -1,
   startY: -1,
+  lastX: 0,
+  lastY: 0,
   init: () => {
     const _t = canvas;
     const theCanvas = document.getElementById('canvas');
@@ -35,6 +37,7 @@ const canvas = {
     theCanvas.addEventListener('mousedown', _t.onMouseDown);
     theCanvas.addEventListener('mouseup', _t.onMouseUp, false);
     theCanvas.addEventListener('mousemove', _t.onMouseMove, false);
+    theCanvas.addEventListener('mouseout', _t.onMouseOut, false);
   },
   drawImage: () => {
     const _t = canvas;
@@ -67,25 +70,31 @@ const canvas = {
   onMouseMove: (ev) => {
     const _t = canvas;
     if (_t.imageDrag === true) {
-      const x = ev.offsetX;
-      const y = ev.offsetY;
-      const newX = _t.imageObject.x + x - _t.startX;
-      const newY = _t.imageObject.y + y - _t.startY;
+      _t.lastX = ev.offsetX;
+      _t.lastY = ev.offsetY;
+      const newX = _t.imageObject.x + _t.lastX - _t.startX;
+      const newY = _t.imageObject.y + _t.lastY - _t.startY;
 
       _t.context.fillStyle = 'white';
       _t.context.fillRect(0, 0, 640, 480);
       _t.context.drawImage(_t.imageObject.image, newX, newY, _t.imageObject.width, _t.imageObject.height);
     }
   },
+  endDrag: () => {
+    const _t = canvas;
+    if (_t.imageDrag) {
+      _t.imageDrag = false;
+      _t.imageObject.x += _t.lastX - _t.startX;
+      _t.imageObject.y += _t.lastY - _t.startY;
+    }
+  },
   onMouseUp: (ev) => {
     const _t = canvas;
-    if(_t.imageDrag) {
-      _t.imageDrag = false;
-      const x = ev.offsetX;
-      const y = ev.offsetY;
-      _t.imageObject.x += x - _t.startX;
-      _t.imageObject.y += y - _t.startY;
-    }
+    _t.endDrag();
+  },
+  onMouseOut: (ev) => {
+    const _t = canvas;
+    _t.endDrag();
   },
 };
 
