@@ -1,0 +1,12 @@
+@charset "UTF-8";
+@import "./libs/mixin";
+@import "./libs/reset";
+@import "./libs/common";
+
+/* ===============
+================== */
+.canvas {
+  background: #fff;
+  width: 640px;
+  height: 480px;
+}

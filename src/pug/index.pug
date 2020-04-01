@@ -1,0 +1,11 @@
+extends _include/_base
+block vars
+    - const isTop = true
+    - const addClass = ''
+    - const PugPageClass = 'top'
+    - const PugFilePath = ''
+block body
+    section.content_section
+        canvas.canvas#canvas(width="640", height="480")
+
+block script

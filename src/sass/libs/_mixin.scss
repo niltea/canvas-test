@@ -1,0 +1,21 @@
+$ease: cubic-bezier(0.4, 0.0, 0.2, 1);
+$easeInOutSine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+$easeOutSine: cubic-bezier(0.39, 0.575, 0.565, 1);
+$easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
+$easeOutCirc: cubic-bezier(0.075, 0.82, 0.165, 1);
+
+@mixin hover {
+	transition: opacity 0.4s;
+	&:hover {
+		opacity: 0.5;
+		transition: opacity 0.2s;
+	}
+}
+
+//hiding text
+@mixin txtHide{
+	text-indent: -9999px;
+	white-space: nowrap;
+	overflow: hidden;
+	vertical-align: bottom;
+}

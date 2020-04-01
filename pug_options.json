@@ -1,0 +1,10 @@
+{
+  "options" : {
+    "siteName"    : "siteName",
+    "description" : "description",
+    "keywords"    : "keywords",
+    "rootUrl"     : "https://example.com",
+    "ogpImage"    : "https://example.com/ogp.png",
+    "twitterID"   : "@twitterID"
+  }
+}
