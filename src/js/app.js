@@ -26,10 +26,10 @@ const canvas = {
       image: new Image(),
       x: 0,
       y: 0,
-      width: 178,
-      height: 100,
+      width: 0,
+      height: 0,
     };
-    _t.imageObject.image.addEventListener('load', _t.drawImage());
+    _t.imageObject.image.addEventListener('load', _t.setImage());
     _t.imageObject.image.src = '/img/sample.jpg';
 
     _t.imageDrag = false;
@@ -39,11 +39,30 @@ const canvas = {
     theCanvas.addEventListener('mousemove', _t.onMouseMove, false);
     theCanvas.addEventListener('mouseout', _t.onMouseOut, false);
   },
-  drawImage: () => {
+  fitWidth: (maxSize, naturalWidth, naturalHeight) => {
+    let width = 0, height = 0;
+    if (naturalWidth > naturalHeight) {
+      // landscape
+      height = maxSize;
+      const mag = naturalHeight / maxSize;
+      width = Math.floor(naturalWidth / mag);
+    } else {
+      // portrait
+      width = maxSize;
+      const mag = naturalWidth / maxSize;
+      height = Math.floor(naturalHeight / mag);
+    }
+    return {width, height};
+  },
+  setImage: () => {
     const _t = canvas;
     return (ev) => {
-      _t.imageObject.width = 178;
-      _t.imageObject.height = 100;
+      const naturalWidth  = ev.target.naturalWidth;
+      const naturalHeight = ev.target.naturalHeight;
+      const maxSize = 100;
+      const geo = _t.fitWidth(maxSize, naturalWidth, naturalHeight);
+      _t.imageObject.width = geo.width;
+      _t.imageObject.height = geo.height;
       const imageObject = _t.imageObject;
       _t.context.drawImage(imageObject.image, imageObject.x,imageObject.y,imageObject.width,imageObject.height);
     };
