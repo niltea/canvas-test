@@ -12,13 +12,13 @@ const log = (() => {
   };
 })();
 
-const canvas = {
+const picture = {
   startX: -1,
   startY: -1,
   lastX: 0,
   lastY: 0,
   init: () => {
-    const _t = canvas;
+    const _t = picture;
     const theCanvas = document.getElementById('canvas');
     _t.context = theCanvas.getContext('2d');
 
@@ -55,7 +55,7 @@ const canvas = {
     return {width, height};
   },
   setImage: () => {
-    const _t = canvas;
+    const _t = picture;
     return (ev) => {
       const naturalWidth  = ev.target.naturalWidth;
       const naturalHeight = ev.target.naturalHeight;
@@ -68,7 +68,7 @@ const canvas = {
     };
   },
   onMouseDown: (ev) => {
-    const _t = canvas;
+    const _t = picture;
     const x = ev.offsetX * 2;
     const y = ev.offsetY * 2;
 
@@ -87,7 +87,7 @@ const canvas = {
     }
   },
   onMouseMove: (ev) => {
-    const _t = canvas;
+    const _t = picture;
     if (_t.imageDrag === true) {
       _t.lastX = ev.offsetX * 2;
       _t.lastY = ev.offsetY * 2;
@@ -100,7 +100,7 @@ const canvas = {
     }
   },
   endDrag: () => {
-    const _t = canvas;
+    const _t = picture;
     if (_t.imageDrag) {
       _t.imageDrag = false;
       _t.imageObject.x += _t.lastX - _t.startX;
@@ -108,18 +108,17 @@ const canvas = {
     }
   },
   onMouseUp: (ev) => {
-    const _t = canvas;
+    const _t = picture;
     _t.endDrag();
   },
   onMouseOut: (ev) => {
-    const _t = canvas;
+    const _t = picture;
     _t.endDrag();
   },
 };
-
 // page load handler
 const loadHandler = () => {
-  canvas.init();
+  picture.init();
 };
 
 // ページロード監視
