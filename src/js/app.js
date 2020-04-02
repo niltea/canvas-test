@@ -59,7 +59,7 @@ const canvas = {
     return (ev) => {
       const naturalWidth  = ev.target.naturalWidth;
       const naturalHeight = ev.target.naturalHeight;
-      const maxSize = 100;
+      const maxSize = 300;
       const geo = _t.fitWidth(maxSize, naturalWidth, naturalHeight);
       _t.imageObject.width = geo.width;
       _t.imageObject.height = geo.height;
@@ -69,8 +69,8 @@ const canvas = {
   },
   onMouseDown: (ev) => {
     const _t = canvas;
-    const x = ev.offsetX;
-    const y = ev.offsetY;
+    const x = ev.offsetX * 2;
+    const y = ev.offsetY * 2;
 
     // log('onMouseDown');
     const isEvInImgGeo = {
@@ -89,13 +89,13 @@ const canvas = {
   onMouseMove: (ev) => {
     const _t = canvas;
     if (_t.imageDrag === true) {
-      _t.lastX = ev.offsetX;
-      _t.lastY = ev.offsetY;
+      _t.lastX = ev.offsetX * 2;
+      _t.lastY = ev.offsetY * 2;
       const newX = _t.imageObject.x + _t.lastX - _t.startX;
       const newY = _t.imageObject.y + _t.lastY - _t.startY;
 
       _t.context.fillStyle = 'white';
-      _t.context.fillRect(0, 0, 640, 480);
+      _t.context.fillRect(0, 0, 1280, 960);
       _t.context.drawImage(_t.imageObject.image, newX, newY, _t.imageObject.width, _t.imageObject.height);
     }
   },
