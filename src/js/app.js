@@ -116,9 +116,126 @@ const picture = {
     _t.endDrag();
   },
 };
+
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+};
+
+class Particle {
+  constructor (ctx, index) {
+    // 初期座標
+    this.ctxWidth = ctx.canvas.width;
+    this.ctxHeight = ctx.canvas.height;
+    this.x = getRandomInt(this.ctxWidth);
+    this.y = getRandomInt(this.ctxHeight);
+    // this.y = Math.floor(getRandomInt(this.ctxHeight));
+    // 進行角度
+    const runDegree = getRandomInt(Math.PI * 360);
+    this.toX = Math.cos( runDegree );
+    this.toY = Math.sin( runDegree );
+
+
+    this.speed = getRandomInt(3) + 1;
+    this.speedDiff = Math.random() / 10;
+    this.size = getRandomInt(8) + 1;
+    this.isSpeedIncrese = getRandomInt(2);
+    this.color = `hsl(${getRandomInt(256)}, ${getRandomInt(40) + 60}%, 50%)`;
+  };
+  move () {
+    this.x += this.toX * this.speed;
+    this.y += this.toY * this.speed;
+    if (this.isSpeedIncrese === 1) {
+      this.speed += this.speedDiff;
+      if (this.speed >= 10) {
+        this.isSpeedIncrese = 0;
+      }
+    } else {
+      this.speed -= this.speedDiff;
+      if (this.speed <= 2) {
+        this.speed = 2;
+        this.isSpeedIncrese = 1;
+      }
+    }
+    // はみだし検知
+    if (this.x + this.size < 0) {
+      this.x = this.ctxWidth;
+    } else if (this.x > this.ctxWidth) {
+      this.x = 0 - this.size;
+    }
+    if (this.y + this.size < 0) {
+      this.y = this.ctxHeight;
+    } else if (this.y > this.ctxHeight) {
+      this.y = 0 - this.size;
+    }
+  }
+}
+const waves = {
+  y50: 0,
+  amplitude: 100,
+  amplitudeDelta: 2,
+  amplitudePlus:  true,
+  angle:  0,
+  PI:  Math.PI * 90,
+  draw: (ctx) => {
+    const _t = waves;
+    _t.y50 = Math.floor(ctx.canvas.height / 2);
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#0f0';
+    ctx.moveTo(0,_t.y50);
+    for (let i = 0; i < ctx.canvas.width; i++) {
+      ctx.lineTo(i, Math.cos((i + _t.angle) / 90) * _t.amplitude + _t.y50);
+    }
+    ctx.stroke();
+    _t.angle += 1;
+    if (_t.angle > _t.PI) _t.angle = _t.PI * -1;
+    if (_t.amplitudePlus === true) {
+      if (_t.amplitude <= 200) {
+        _t.amplitude += _t.amplitudeDelta;
+      } else {
+        _t.amplitudePlus = false;
+      }
+    } else {
+      if (_t.amplitude >= -200 ) {
+        _t.amplitude -= _t.amplitudeDelta;
+      } else {
+        _t.amplitudePlus = true;
+      }
+    }
+
+  },
+
+};
+
+const particles = [];
 // page load handler
 const loadHandler = () => {
-  picture.init();
+  const theCanvas = document.getElementById('canvas');
+  const ctx = theCanvas.getContext('2d');
+
+  for (let i = 0; i < 100; i++) {
+    particles[i] = new Particle(ctx, i);
+  }
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  const draw = () => {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // draw particles
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      ctx.beginPath();
+      ctx.fillStyle = p.color;
+      ctx.arc(p.x, p.y, p.size, 0, 360 * Math.PI);
+      ctx.fill();
+      p.move();
+    }
+    // draw wave
+    waves.draw(ctx);
+  };
+  // 起動
+  setInterval(draw, 25);
 };
 
 // ページロード監視
